@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kin Labs - Building Software That Matters</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1a1a1a; background: #fff; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid #e0e0e0;
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px;
+    }
+    .nav-logo { font-size: 18px; font-weight: 600; color: #0067b8; text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { text-decoration: none; color: #1a1a1a; font-size: 14px; padding-bottom: 2px; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
+    .nav-links a:hover { border-color: #0067b8; color: #0067b8; }
+    .nav-cta { background: #0067b8; color: #fff; border: none; padding: 8px 18px; font-size: 13px; cursor: pointer; border-radius: 2px; text-decoration: none; white-space: nowrap; }
+    .nav-cta:hover { background: #005a9e; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #1a1a1a; border-radius: 2px; transition: all 0.3s; }
+    .mobile-menu { display: none; background: #fff; border-top: 1px solid #e0e0e0; padding: 16px 24px; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a { display: block; padding: 12px 0; font-size: 15px; color: #1a1a1a; text-decoration: none; border-bottom: 1px solid #f0f0f0; }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: #0067b8; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #0067b8 0%, #003f73 100%);
+      color: #fff; padding: 80px 24px;
+      text-align: center;
+    }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.15);
+      color: #fff; font-size: 12px; padding: 4px 12px;
+      border-radius: 20px; margin-bottom: 24px; letter-spacing: 0.5px;
+    }
+    .hero h1 { font-size: clamp(28px, 5vw, 52px); font-weight: 300; line-height: 1.15; margin-bottom: 20px; }
+    .hero h1 strong { font-weight: 600; }
+    .hero p { font-size: clamp(15px, 2vw, 18px); opacity: 0.9; margin-bottom: 36px; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #fff; color: #0067b8; padding: 12px 28px; font-size: 15px; font-weight: 600; border-radius: 2px; text-decoration: none; transition: background 0.2s; }
+    .btn-primary:hover { background: #f0f0f0; }
+    .btn-secondary { background: transparent; color: #fff; padding: 12px 28px; font-size: 15px; border: 1px solid rgba(255,255,255,0.5); border-radius: 2px; text-decoration: none; transition: border-color 0.2s; }
+    .btn-secondary:hover { border-color: #fff; }
+
+    /* TRUST BAR */
+    .trust-bar { background: #0067b8; padding: 14px 24px; }
+    .trust-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+    .trust-item { color: #fff; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    .trust-item::before { content: '\2713'; font-weight: bold; }
+
+    /* SECTIONS */
+    section { padding: 64px 24px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-label { color: #0067b8; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .section-title { font-size: clamp(24px, 4vw, 40px); font-weight: 300; margin-bottom: 16px; }
+    .section-title strong { font-weight: 600; }
+    .section-subtitle { color: #555; font-size: 16px; max-width: 560px; line-height: 1.6; }
+
+    /* PRODUCTS */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .product-card {
+      border: 1px solid #e0e0e0; padding: 32px 24px;
+      border-radius: 4px; position: relative;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .product-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #0067b8; border-radius: 4px 4px 0 0; }
+    .product-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 2px; display: inline-block; margin-bottom: 16px; }
+    .tag-live { background: #e6f4ea; color: #137333; }
+    .tag-beta { background: #fff3e0; color: #e65100; }
+    .tag-soon { background: #f0f0f0; color: #666; }
+    .product-card h3 { font-size: 22px; font-weight: 600; margin-bottom: 10px; color: #1a1a1a; }
+    .product-card p { color: #555; font-size: 14px; line-height: 1.6; margin-bottom: 20px; flex: 1; }
+    .product-features { list-style: none; margin-bottom: 24px; }
+    .product-features li { font-size: 13px; color: #444; padding: 4px 0; padding-left: 16px; position: relative; }
+    .product-features li::before { content: '\2013'; position: absolute; left: 0; color: #0067b8; }
+    .product-link { color: #0067b8; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: auto; }
+    .product-link:hover { text-decoration: underline; }
+    .product-link::after { content: ' \2192'; }
+
+    /* ABOUT */
+    .about { background: #f2f2f2; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; margin-top: 48px; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat-card { background: #fff; padding: 24px; border-radius: 4px; border: 1px solid #e0e0e0; }
+    .stat-card .number { font-size: 36px; font-weight: 300; color: #0067b8; }
+    .stat-card .label { font-size: 13px; color: #555; margin-top: 4px; }
+    .about-text p { color: #444; font-size: 15px; line-height: 1.8; margin-bottom: 16px; }
+
+    /* VALUES */
+    .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+    .value-card { padding: 28px 20px; border: 1px solid #e0e0e0; border-radius: 4px; }
+    .value-icon { font-size: 28px; margin-bottom: 12px; }
+    .value-card h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .value-card p { font-size: 13px; color: #555; line-height: 1.6; }
+
+    /* CTA */
+    .cta-section { background: #0067b8; text-align: center; }
+    .cta-section h2 { color: #fff; font-size: clamp(22px, 4vw, 36px); font-weight: 300; margin-bottom: 12px; }
+    .cta-section h2 strong { font-weight: 600; }
+    .cta-section p { color: rgba(255,255,255,0.85); font-size: 16px; margin-bottom: 32px; }
+    .cta-email { display: inline-block; background: #fff; color: #0067b8; padding: 14px 32px; font-size: 15px; font-weight: 600; border-radius: 2px; text-decoration: none; }
+    .cta-email:hover { background: #f0f0f0; }
+
+    /* FOOTER */
+    footer { background: #1a1a1a; color: #ccc; padding: 48px 24px 24px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; line-height: 1.7; color: #999; margin-top: 12px; max-width: 240px; }
+    .footer-logo { font-size: 20px; font-weight: 600; color: #fff; }
+    .footer-col h5 { color: #fff; font-size: 13px; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .footer-col a { display: block; color: #999; font-size: 13px; text-decoration: none; margin-bottom: 8px; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 12px; color: #666; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 48px 16px; }
+      .hero { padding: 60px 16px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .trust-inner { gap: 12px; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-secondary { width: 100%; max-width: 280px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">Kin Labs</a>
+      <ul class="nav-links">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#values">Values</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="mailto:hello@kinlabs.ca" class="nav-cta">Get in Touch</a>
+      <div class="nav-hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#products" onclick="toggleMenu()">Products</a>
+      <a href="#about" onclick="toggleMenu()">About</a>
+      <a href="#values" onclick="toggleMenu()">Values</a>
+      <a href="#contact" onclick="toggleMenu()">Contact</a>
+      <a href="mailto:hello@kinlabs.ca" onclick="toggleMenu()">Get in Touch</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Edmonton, Alberta &mdash; Canadian Software Company</div>
+      <h1>Building software<br><strong>that matters.</strong></h1>
+      <p>Kin Labs creates thoughtful, AI-powered products built for real people. Simple tools that work beautifully.</p>
+      <div class="hero-btns">
+        <a href="#products" class="btn-primary">Explore Products</a>
+        <a href="#about" class="btn-secondary">Learn About Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-item">Privacy First</div>
+      <div class="trust-item">Built in Canada</div>
+      <div class="trust-item">AI-Powered</div>
+      <div class="trust-item">No Coding Required</div>
+      <div class="trust-item">Real Support</div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section id="products">
+    <div class="section-inner">
+      <div class="section-label">Our Products</div>
+      <h2 class="section-title">Software built for <strong>real people</strong></h2>
+      <p class="section-subtitle">Each product is designed to solve a real problem, simply and beautifully.</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <span class="product-tag tag-live">Live</span>
+          <h3>Sage Tutor</h3>
+          <p>An AI-powered tutoring platform that adapts to every student. Personalized learning at scale.</p>
+          <ul class="product-features">
+            <li>Adaptive AI curriculum</li>
+            <li>Works for any subject</li>
+            <li>Built for students and parents</li>
+          </ul>
+          <a href="https://sagetutor.app" class="product-link" target="_blank">Visit Sage Tutor</a>
+        </div>
+        <div class="product-card">
+          <span class="product-tag tag-live">Live</span>
+          <h3>Luminox</h3>
+          <p>An AI-powered book writing platform. Write your book with an AI that knows every character, plot, and chapter &mdash; from first draft to finished novel.</p>
+          <ul class="product-features">
+            <li>AI co-writing &amp; drafting</li>
+            <li>Character &amp; plot tracking</li>
+            <li>Plan, draft, and export</li>
+          </ul>
+          <a href="https://getluminox.app" class="product-link" target="_blank">Visit Luminox</a>
+        </div>
+        <div class="product-card">
+          <span class="product-tag tag-beta">Beta</span>
+          <h3>MaxHome</h3>
+          <p>Your home operating system. Track maintenance, manage documents, and stay on top of your property.</p>
+          <ul class="product-features">
+            <li>Home maintenance tracking</li>
+            <li>Document storage</li>
+            <li>Smart reminders</li>
+          </ul>
+          <a href="https://maxhome.app" class="product-link" target="_blank">Visit MaxHome</a>
+        </div>
+        <div class="product-card">
+          <span class="product-tag tag-live">Live</span>
+          <h3>Kin</h3>
+          <p>Build your personal team of AI agents &mdash; each one specialized, each one with memory. Unlike other AI tools that forget everything, Kin remembers your goals, your clients, your projects, and your preferences. Tell it once. It knows you forever.</p>
+          <ul class="product-features">
+            <li>Specialized agents with memory</li>
+            <li>Connects to the apps you already use</li>
+            <li>Works for any role or lifestyle</li>
+          </ul>
+          <a href="https://kin.team" class="product-link" target="_blank">Visit Kin</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">About Kin Labs</div>
+          <h2 class="section-title">Software with <strong>purpose</strong></h2>
+          <p>Kin Labs is an Edmonton-based software company building products that make everyday life simpler, smarter, and more organized.</p>
+          <p>We believe great software should feel effortless. Every product we build starts with a real problem and is designed to be used by real people &mdash; not just tech enthusiasts.</p>
+          <p>Privacy, simplicity, and quality are at the core of everything we ship.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card"><div class="number">4</div><div class="label">Active Products</div></div>
+          <div class="stat-card"><div class="number">100%</div><div class="label">Canadian Built</div></div>
+          <div class="stat-card"><div class="number">AI</div><div class="label">Powered Products</div></div>
+          <div class="stat-card"><div class="number">YEG</div><div class="label">Edmonton, AB</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section id="values">
+    <div class="section-inner">
+      <div class="section-label">What We Stand For</div>
+      <h2 class="section-title">Our <strong>values</strong></h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">&#x1F512;</div>
+          <h4>Privacy First</h4>
+          <p>Your data belongs to you. We build with privacy by design, not as an afterthought.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">&#x2699;&#xFE0F;</div>
+          <h4>Radical Simplicity</h4>
+          <p>The best software is invisible. We remove complexity so you can focus on what matters.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">&#x1F341;</div>
+          <h4>Built in Canada</h4>
+          <p>Proudly built in Edmonton, Alberta. We care about the communities we serve.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">&#x1F465;</div>
+          <h4>Real Support</h4>
+          <p>When you reach out, a real person responds. No bots, no runarounds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="cta-section">
+    <div class="section-inner">
+      <h2>Ready to work <strong>together?</strong></h2>
+      <p>Have a question, idea, or partnership in mind? We'd love to hear from you.</p>
+      <a href="mailto:hello@kinlabs.ca" class="cta-email">hello@kinlabs.ca</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">Kin Labs</div>
+          <p>Building software that matters. Edmonton, Alberta, Canada.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Products</h5>
+          <a href="https://sagetutor.app" target="_blank">Sage Tutor</a>
+          <a href="https://getluminox.app" target="_blank">Luminox</a>
+          <a href="https://maxhome.app" target="_blank">MaxHome</a>
+          <a href="https://kin.team" target="_blank">Kin</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="#about">About</a>
+          <a href="#values">Values</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:hello@kinlabs.ca">hello@kinlabs.ca</a>
+          <a href="#">Edmonton, AB</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Kin Labs Inc. All rights reserved.</p>
+        <p>Built in Edmonton, Alberta, Canada</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('open');
+    }
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
